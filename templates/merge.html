@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Birleştirici</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.drop-zone {
+    border: 2px dashed #333;
+    padding: 40px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+#file-list {
+    margin-bottom: 20px;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.file-item button {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Dosyalarını Birleştir</h1>
+        <div id="drop-zone" class="drop-zone">
+            <p>PDF dosyalarını buraya sürükleyin ve bırakın.</p>
+            <input type="file" id="file-input" multiple accept=".pdf" hidden>
+            <button onclick="document.getElementById('file-input').click()">Dosya Seç</button>
+        </div>
+        <div id="file-list" class="file-list"></div>
+        <button id="merge-btn" onclick="mergePDFs()">Birleştir</button>
+    </div>
+<script>
+  const dropZone = document.getElementById("drop-zone");
+const fileInput = document.getElementById("file-input");
+const fileList = document.getElementById("file-list");
+const mergeButton = document.getElementById("merge-btn");
+let files = [];
+
+dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = "#e1e1e1";
+});
+
+dropZone.addEventListener("dragleave", () => {
+    dropZone.style.backgroundColor = "#fafafa";
+});
+
+dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = "#fafafa";
+    const droppedFiles = e.dataTransfer.files;
+    handleFiles(droppedFiles);
+});
+
+fileInput.addEventListener("change", (e) => {
+    handleFiles(e.target.files);
+});
+
+function handleFiles(newFiles) {
+    for (const file of newFiles) {
+        if (file.type === "application/pdf") {
+            files.push(file);
+            const fileItem = document.createElement("div");
+            fileItem.classList.add("file-item");
+            fileItem.innerHTML = `
+                <span>${file.name}</span>
+                <button onclick="removeFile('${file.name}')">X</button>
+            `;
+            fileList.appendChild(fileItem);
+        } else {
+            alert("Sadece PDF dosyalarını yükleyebilirsiniz.");
+        }
+    }
+    toggleMergeButton();
+}
+
+function removeFile(fileName) {
+    files = files.filter(file => file.name !== fileName);
+    const fileItems = document.querySelectorAll(".file-item");
+    fileItems.forEach(item => {
+        if (item.querySelector("span").innerText === fileName) {
+            item.remove();
+        }
+    });
+    toggleMergeButton();
+}
+
+function toggleMergeButton() {
+    mergeButton.disabled = files.length < 2;
+}
+
+function mergePDFs() {
+    const formData = new FormData();
+    files.forEach(file => formData.append("pdfs", file));
+
+    fetch("/merge", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "merged.pdf";
+        link.click();
+    })
+    .catch(error => alert("Bir hata oluştu: " + error));
+}
+
+</script>
+</body>
+</html>

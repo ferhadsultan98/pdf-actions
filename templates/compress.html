@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Sıkıştırıcı</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        .drop-area {
+            border: 2px dashed #007BFF;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .drop-area:hover {
+            background-color: #e9ecef;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .btn-compress {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-compress:hover {
+            background-color: #0056b3;
+        }
+        .file-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Dosyasını Sıkıştır</h1>
+        <div class="drop-area" id="drop-area">
+            <p>PDF dosyasını buraya sürükleyin veya seçmek için tıklayın</p>
+            <input type="file" id="file-input" accept=".pdf">
+        </div>
+        <button class="btn-compress" id="compress-btn" disabled>Sıkıştır</button>
+        <div class="file-info" id="file-info"></div>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('file-input');
+        const compressBtn = document.getElementById('compress-btn');
+        const fileInfo = document.getElementById('file-info');
+        let selectedFile = null;
+
+        // Drag and Drop işlemi
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.style.backgroundColor = '#f1f1f1';
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.backgroundColor = '';
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.backgroundColor = '';
+            selectedFile = e.dataTransfer.files[0];
+            displayFileInfo(selectedFile);
+        });
+
+        // Dosya seçimi
+        fileInput.addEventListener('change', () => {
+            selectedFile = fileInput.files[0];
+            displayFileInfo(selectedFile);
+        });
+
+        // Dosya bilgilerini gösterme
+        function displayFileInfo(file) {
+            if (file && file.type === 'application/pdf') {
+                compressBtn.disabled = false;
+                fileInfo.innerHTML = `<p><strong>Seçilen dosya:</strong> ${file.name}</p><p><strong>Boyut:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB</p>`;
+            } else {
+                compressBtn.disabled = true;
+                fileInfo.innerHTML = '<p>Lütfen geçerli bir PDF dosyası seçin.</p>';
+            }
+        }
+
+        // Sıkıştırma işlemi başlatma
+        compressBtn.addEventListener('click', () => {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            fetch('/compress', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const downloadLink = document.createElement('a');
+                const url = window.URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = 'compressed.pdf';
+                downloadLink.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(err => {
+                alert('Sıkıştırma işlemi başarısız oldu.');
+                console.error(err);
+            });
+        });
+    </script>
+</body>
+</html>

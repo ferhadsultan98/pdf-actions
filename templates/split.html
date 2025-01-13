@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Bölme</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script> <!-- PDF.js Kütüphanesi -->
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+h1 {
+    text-align: center;
+}
+
+input[type="file"],
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.page-selection {
+    margin-bottom: 20px;
+}
+
+#download-link {
+    margin-top: 20px;
+}
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Dosyasını Bölme</h1>
+        
+        <!-- PDF yükleme alanı -->
+        <input type="file" id="pdf-file" accept=".pdf" />
+        
+        <div id="pdf-pages" class="page-selection">
+            <!-- Dinamik olarak sayfa numaraları buraya eklenecek -->
+        </div>
+        
+        <!-- Sayfa aralığını seçme -->
+        <label for="start-page">Başlangıç Sayfası:</label>
+        <input type="number" id="start-page" min="1">
+        
+        <label for="end-page">Bitiş Sayfası:</label>
+        <input type="number" id="end-page" min="1">
+        
+        <button id="split-btn">PDF'i Böl</button>
+        
+        <p id="error-message" style="color: red; display: none;">Lütfen geçerli bir sayfa aralığı girin.</p>
+         <!-- Sayfa sayısı bilgisi -->
+         <p id="page-info" style="display:none;"></p>
+        
+        <div id="download-link" style="display: none;">
+            <a href="#" id="download-btn" download>PDF'i İndir</a>
+        </div>
+    </div>
+
+<script>
+   document.getElementById('pdf-file').addEventListener('change', handleFileSelect);
+document.getElementById('split-btn').addEventListener('click', splitPDF);
+
+let pdfDoc = null;
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const typedarray = new Uint8Array(e.target.result);
+            pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                pdfDoc = pdf;
+                const totalPages = pdf.numPages;  // Toplam sayfa sayısını al
+                document.getElementById('page-info').style.display = 'block';
+                document.getElementById('page-info').innerText = `Toplam Sayfa: ${totalPages}`;
+            }).catch(function(error) {
+                console.error("PDF yükleme hatası: ", error);
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert('Lütfen geçerli bir PDF dosyası yükleyin.');
+    }
+}
+
+function splitPDF() {
+    const startPage = parseInt(document.getElementById('start-page').value);
+    const endPage = parseInt(document.getElementById('end-page').value);
+
+    if (startPage > 0 && endPage >= startPage && endPage <= pdfDoc.numPages) {
+        const formData = new FormData();
+        formData.append('start', startPage);
+        formData.append('end', endPage);
+        formData.append('pdf', document.getElementById('pdf-file').files[0]);
+
+        fetch('/split_pdf', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const downloadLink = document.getElementById('download-link');
+            const downloadBtn = document.getElementById('download-btn');
+            const url = URL.createObjectURL(blob);
+            downloadBtn.href = url;
+            downloadLink.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    } else {
+        document.getElementById('error-message').style.display = 'block';
+    }
+}
+
+
+</script>
+</body>
+</html>
