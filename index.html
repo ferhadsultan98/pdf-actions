@@ -1,65 +1,178 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speedometer</title>
+    <title>Canlı GPS Hızölçer</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #1e1e1e;
-            color: white;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             font-family: Arial, sans-serif;
         }
+
         .speedometer {
+            position: relative;
             width: 300px;
             height: 300px;
+            background: #fff;
             border-radius: 50%;
-            background: radial-gradient(circle, #222, #111);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
-        .needle {
-            width: 4px;
-            height: 100px;
-            background: red;
+
+        .speedometer::before {
+            content: '';
             position: absolute;
-            bottom: 50%;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            background: #f0f0f0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .needle {
+            position: absolute;
+            width: 4px;
+            height: 120px;
+            background: #ff4b5c;
+            top: 50%;
             left: 50%;
             transform-origin: bottom center;
-            transform: translateX(-50%) rotate(-90deg);
-            transition: transform 0.3s ease-in-out;
+            transform: translateX(-50%) rotate(-120deg);
+            transition: transform 0.5s ease;
+            border-radius: 4px;
         }
-        .speed {
+
+        .center {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .labels span {
+            position: absolute;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            transform: translate(-50%, -50%);
+        }
+
+        .speed-value {
             position: absolute;
             bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 24px;
+            font-weight: bold;
+            color: #ff4b5c;
         }
+
+        /* Responsive Tasarım */
+        @media (max-width: 400px) {
+            .speedometer {
+                width: 250px;
+                height: 250px;
+            }
+
+            .needle {
+                height: 100px;
+            }
+
+            .labels span {
+                font-size: 16px;
+            }
+
+            .speed-value {
+                font-size: 20px;
+            }
+        }
+
+        /* Hız etiketlerinin pozisyonları */
+        .labels span:nth-child(1) { top: 15%; left: 15%; } /* 0 */
+        .labels span:nth-child(2) { top: 5%; left: 35%; } /* 20 */
+        .labels span:nth-child(3) { top: 5%; left: 65%; } /* 40 */
+        .labels span:nth-child(4) { top: 15%; left: 85%; } /* 60 */
+        .labels span:nth-child(5) { top: 40%; left: 95%; } /* 80 */
+        .labels span:nth-child(6) { top: 65%; left: 85%; } /* 100 */
+        .labels span:nth-child(7) { top: 85%; left: 65%; } /* 120 */
     </style>
 </head>
 <body>
     <div class="speedometer">
         <div class="needle" id="needle"></div>
-        <div class="speed" id="speed">0 km/h</div>
+        <div class="center"></div>
+        <div class="labels">
+            <span>0</span>
+            <span>20</span>
+            <span>40</span>
+            <span>60</span>
+            <span>80</span>
+            <span>100</span>
+            <span>120</span>
+        </div>
+        <div class="speed-value" id="speedValue">0 km/s</div>
     </div>
-    <script>
-        function updateSpeed(speed) {
-            const needle = document.getElementById('needle');
-            const speedText = document.getElementById('speed');
-            let angle = -90 + (speed * 1.8); // 180 degree scale (0-100 km/h)
-            needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
-            speedText.textContent = `${speed} km/h`;
-        }// Simulated speed changes
-    let speed = 0;
-    setInterval(() => {
-        speed = Math.floor(Math.random() * 101); // Random speed between 0-100
-        updateSpeed(speed);
-    }, 2000);
-</script>
 
+    <script>
+        const needle = document.getElementById('needle');
+        const speedValue = document.getElementById('speed.snpValue');
+
+        function updateSpeedometer(speed) {
+            // Hız 0-120 km/s arasında olacak şekilde sınırlıyoruz
+            speed = Math.min(Math.max(speed, 0), 120);
+            
+            // İğneyi döndürme: -120° (0 km/s) ile 120° (120 km/s) arasında
+            const angle = -120 + (speed * 240 / 120);
+            needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+            
+            // Hız değerini güncelle
+            speedValue.textContent = `${Math.round(speed)} km/s`;
+        }
+
+        // GPS ile hızı alma
+        if ('geolocation' in navigator) {
+            navigator.geolocation.watchPosition(
+                (position) => {
+                    const speed = position.coords.speed; // Hız metre/saniye cinsinden gelir
+                    if (speed !== null) {
+                        const speedKmh = speed * 3.6; // Metre/saniyeyi km/s'e çevir
+                        updateSpeedometer(speedKmh);
+                    } else {
+                        updateSpeedometer(0); // Hız bilgisi yoksa 0 göster
+                    }
+                },
+                (error) => {
+                    console.error('GPS Hatası:', error);
+                    speedValue.textContent = 'GPS Hatası';
+                },
+                {
+                    enableHighAccuracy: true, // Daha yüksek doğruluk
+                    maximumAge: 0, // Önbellek kullanma
+                    timeout: 5000 // 5 saniye içinde cevap bekle
+                }
+            );
+        } else {
+            speedValue.textContent = 'GPS Desteklenmiyor';
+        }
+    </script>
 </body>
 </html>
