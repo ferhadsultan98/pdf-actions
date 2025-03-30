@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canlı Dijital Hızölçer</title>
+    <title>Canlı Hızölçer</title>
     <style>
         body {
             display: flex;
@@ -12,133 +12,93 @@
             height: 100vh;
             margin: 0;
             background: #0d1b2a;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: Arial, sans-serif;
             color: #fff;
         }
 
-        .speed-container {
+        .speed-box {
             text-align: center;
+            padding: 30px;
             background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
-            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
             width: 80%;
-            max-width: 400px;
-            transition: transform 0.3s ease;
-        }
-
-        .speed-container:hover {
-            transform: scale(1.05);
+            max-width: 350px;
         }
 
         .speed {
-            font-size: 80px;
-            font-weight: bold;
+            font-size: 70px;
             color: #00ffcc;
             margin: 0;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.7);
         }
 
         .unit {
-            font-size: 24px;
+            font-size: 20px;
             color: #b0b0b0;
-            margin-top: -10px;
         }
 
-        .status {
-            font-size: 16px;
+        .info {
+            font-size: 14px;
             color: #ff4b5c;
-            margin-top: 20px;
-            opacity: 0.8;
+            margin-top: 15px;
         }
 
-        @media (max-width: 500px) {
-            .speed-container {
-                padding: 30px;
-            }
-
+        @media (max-width: 400px) {
             .speed {
-                font-size: 60px;
+                font-size: 50px;
             }
 
             .unit {
-                font-size: 20px;
-            }
-
-            .status {
-                font-size: 14px;
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="speed-container">
-        <h1 class="speed" id="speed">0</h1>
-        <p class="unit">km/s</p>
-        <p class="status" id="status">Hız Ölçülüyor...</p>
+    <div class="speed-box">
+        <div class="speed" id="speed">0</div>
+        <div class="unit">km/s</div>
+        <div class="info" id="info">Hız Ölçülüyor...</div>
     </div>
 
     <script>
-        const speedDisplay = document.getElementById('speed');
-        const statusDisplay = document.getElementById('status');
+        const speedElement = document.getElementById('speed');
+        const infoElement = document.getElementById('info');
 
-        function updateSpeed(speedKmh) {
-            speedDisplay.textContent = Math.round(speedKmh);
-            statusDisplay.textContent = 'Hız Ölçülüyor...';
+        // Hız güncelleme fonksiyonu
+        function setSpeed(speedKmh) {
+            speedElement.textContent = Math.round(speedKmh);
+            infoElement.textContent = 'Hız Ölçülüyor...';
         }
 
-        function startSpeedTracking() {
-            if ('geolocation' in navigator) {
-                navigator.geolocation.watchPosition(
-                    (position) => {
-                        const speed = position.coords.speed;
-                        if (speed !== null && speed >= 0) {
-                            const speedKmh = speed * 3.6; // Metre/saniyeden km/s'e
-                            updateSpeed(speedKmh);
-                        } else {
-                            updateSpeed(0);
-                            statusDisplay.textContent = 'Hareket Bekleniyor';
-                        }
-                    },
-                    (error) => {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                statusDisplay.textContent = 'GPS izni reddedildi. Lütfen izni açın.';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                statusDisplay.textContent = 'Konum bilgisi alınamıyor.';
-                                break;
-                            case error.TIMEOUT:
-                                statusDisplay.textContent = 'GPS zaman aşımına uğradı.';
-                                break;
-                            default:
-                                statusDisplay.textContent = 'Bilinmeyen bir hata oluştu.';
-                                break;
-                        }
-                        speedDisplay.textContent = '0';
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        maximumAge: 0,
-                        timeout: 5000
+        // GPS başlatma
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(
+                (position) => {
+                    const speed = position.coords.speed; // Metre/saniye
+                    if (speed !== null && speed >= 0) {
+                        const speedKmh = speed * 3.6; // km/s'e çevir
+                        setSpeed(speedKmh);
+                    } else {
+                        setSpeed(0);
+                        infoElement.textContent = 'Hareket Algılanmadı';
                     }
-                );
-            } else {
-                speedDisplay.textContent = 'Hata';
-                statusDisplay.textContent = 'Tarayıcınız GPS desteklemiyor.';
-            }
+                },
+                (error) => {
+                    setSpeed(0);
+                    infoElement.textContent = `Hata: ${error.message}`;
+                    console.log('GPS Hata Kodu:', error.code, 'Mesaj:', error.message);
+                },
+                {
+                    enableHighAccuracy: true, // Daha iyi doğruluk
+                    maximumAge: 0, // Önbellek yok
+                    timeout: 10000 // 10 saniye zaman aşımı
+                }
+            );
+        } else {
+            speedElement.textContent = 'Hata';
+            infoElement.textContent = 'GPS Desteklenmiyor';
         }
-
-        // İlk çalıştırmada izni kontrol et ve başlat
-        startSpeedTracking();
-
-        // Kullanıcı izni reddederse tekrar deneme şansı
-        statusDisplay.addEventListener('click', () => {
-            if (statusDisplay.textContent.includes('GPS izni reddedildi')) {
-                startSpeedTracking();
-            }
-        });
     </script>
 </body>
 </html>
