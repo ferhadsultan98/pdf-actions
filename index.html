@@ -53,7 +53,6 @@
             opacity: 0.8;
         }
 
-        /* Responsive Tasarım */
         @media (max-width: 500px) {
             .speed-container {
                 padding: 30px;
@@ -89,34 +88,57 @@
             statusDisplay.textContent = 'Hız Ölçülüyor...';
         }
 
-        // GPS ile hızı alma
-        if ('geolocation' in navigator) {
-            navigator.geolocation.watchPosition(
-                (position) => {
-                    const speed = position.coords.speed; // Hız metre/saniye cinsinden
-                    if (speed !== null && speed >= 0) {
-                        const speedKmh = speed * 3.6; // km/s'e çevir
-                        updateSpeed(speedKmh);
-                    } else {
-                        updateSpeed(0);
-                        statusDisplay.textContent = 'Hareket Bekleniyor';
+        function startSpeedTracking() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const speed = position.coords.speed;
+                        if (speed !== null && speed >= 0) {
+                            const speedKmh = speed * 3.6; // Metre/saniyeden km/s'e
+                            updateSpeed(speedKmh);
+                        } else {
+                            updateSpeed(0);
+                            statusDisplay.textContent = 'Hareket Bekleniyor';
+                        }
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                statusDisplay.textContent = 'GPS izni reddedildi. Lütfen izni açın.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                statusDisplay.textContent = 'Konum bilgisi alınamıyor.';
+                                break;
+                            case error.TIMEOUT:
+                                statusDisplay.textContent = 'GPS zaman aşımına uğradı.';
+                                break;
+                            default:
+                                statusDisplay.textContent = 'Bilinmeyen bir hata oluştu.';
+                                break;
+                        }
+                        speedDisplay.textContent = '0';
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 5000
                     }
-                },
-                (error) => {
-                    speedDisplay.textContent = 'Hata';
-                    statusDisplay.textContent = `GPS Hatası: ${error.message}`;
-                    console.error('GPS Hatası:', error);
-                },
-                {
-                    enableHighAccuracy: true, // Daha yüksek doğruluk
-                    maximumAge: 0, // Önbellek kullanma
-                    timeout: 5000 // 5 saniye zaman aşımı
-                }
-            );
-        } else {
-            speedDisplay.textContent = 'Hata';
-            statusDisplay.textContent = 'GPS Desteklenmiyor';
+                );
+            } else {
+                speedDisplay.textContent = 'Hata';
+                statusDisplay.textContent = 'Tarayıcınız GPS desteklemiyor.';
+            }
         }
+
+        // İlk çalıştırmada izni kontrol et ve başlat
+        startSpeedTracking();
+
+        // Kullanıcı izni reddederse tekrar deneme şansı
+        statusDisplay.addEventListener('click', () => {
+            if (statusDisplay.textContent.includes('GPS izni reddedildi')) {
+                startSpeedTracking();
+            }
+        });
     </script>
 </body>
 </html>
