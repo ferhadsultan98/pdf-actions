@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canlı GPS Hızölçer</title>
+    <title>Canlı Dijital Hızölçer</title>
     <style>
         body {
             display: flex;
@@ -11,168 +11,134 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            font-family: Arial, sans-serif;
+            background: #0d1b2a;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
         }
 
-        .speedometer {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-
-        .speedometer::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
+        .speed-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            backdrop-filter: blur(10px);
             width: 80%;
-            height: 80%;
-            background: #f0f0f0;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+            max-width: 400px;
+            transition: transform 0.3s ease;
         }
 
-        .needle {
-            position: absolute;
-            width: 4px;
-            height: 120px;
-            background: #ff4b5c;
-            top: 50%;
-            left: 50%;
-            transform-origin: bottom center;
-            transform: translateX(-50%) rotate(-120deg);
-            transition: transform 0.5s ease;
-            border-radius: 4px;
+        .speed-container:hover {
+            transform: scale(1.05);
         }
 
-        .center {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #333;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .labels {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .labels span {
-            position: absolute;
-            font-size: 18px;
+        .speed {
+            font-size: 80px;
             font-weight: bold;
-            color: #333;
-            transform: translate(-50%, -50%);
+            color: #00ffcc;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.7);
         }
 
-        .speed-value {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        .unit {
             font-size: 24px;
-            font-weight: bold;
-            color: #ff4b5c;
+            color: #b0b0b0;
+            margin-top: -10px;
         }
 
-        /* Responsive Tasarım */
-        @media (max-width: 400px) {
-            .speedometer {
-                width: 250px;
-                height: 250px;
+        .status {
+            font-size: 16px;
+            color: #ff4b5c;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 500px) {
+            .speed-container {
+                padding: 30px;
             }
 
-            .needle {
-                height: 100px;
+            .speed {
+                font-size: 60px;
             }
 
-            .labels span {
-                font-size: 16px;
-            }
-
-            .speed-value {
+            .unit {
                 font-size: 20px;
             }
-        }
 
-        /* Hız etiketlerinin pozisyonları */
-        .labels span:nth-child(1) { top: 15%; left: 15%; } /* 0 */
-        .labels span:nth-child(2) { top: 5%; left: 35%; } /* 20 */
-        .labels span:nth-child(3) { top: 5%; left: 65%; } /* 40 */
-        .labels span:nth-child(4) { top: 15%; left: 85%; } /* 60 */
-        .labels span:nth-child(5) { top: 40%; left: 95%; } /* 80 */
-        .labels span:nth-child(6) { top: 65%; left: 85%; } /* 100 */
-        .labels span:nth-child(7) { top: 85%; left: 65%; } /* 120 */
+            .status {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="speedometer">
-        <div class="needle" id="needle"></div>
-        <div class="center"></div>
-        <div class="labels">
-            <span>0</span>
-            <span>20</span>
-            <span>40</span>
-            <span>60</span>
-            <span>80</span>
-            <span>100</span>
-            <span>120</span>
-        </div>
-        <div class="speed-value" id="speedValue">0 km/s</div>
+    <div class="speed-container">
+        <h1 class="speed" id="speed">0</h1>
+        <p class="unit">km/s</p>
+        <p class="status" id="status">Hız Ölçülüyor...</p>
     </div>
 
     <script>
-        const needle = document.getElementById('needle');
-        const speedValue = document.getElementById('speed.snpValue');
+        const speedDisplay = document.getElementById('speed');
+        const statusDisplay = document.getElementById('status');
 
-        function updateSpeedometer(speed) {
-            // Hız 0-120 km/s arasında olacak şekilde sınırlıyoruz
-            speed = Math.min(Math.max(speed, 0), 120);
-            
-            // İğneyi döndürme: -120° (0 km/s) ile 120° (120 km/s) arasında
-            const angle = -120 + (speed * 240 / 120);
-            needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
-            
-            // Hız değerini güncelle
-            speedValue.textContent = `${Math.round(speed)} km/s`;
+        function updateSpeed(speedKmh) {
+            speedDisplay.textContent = Math.round(speedKmh);
+            statusDisplay.textContent = 'Hız Ölçülüyor...';
         }
 
-        // GPS ile hızı alma
-        if ('geolocation' in navigator) {
-            navigator.geolocation.watchPosition(
-                (position) => {
-                    const speed = position.coords.speed; // Hız metre/saniye cinsinden gelir
-                    if (speed !== null) {
-                        const speedKmh = speed * 3.6; // Metre/saniyeyi km/s'e çevir
-                        updateSpeedometer(speedKmh);
-                    } else {
-                        updateSpeedometer(0); // Hız bilgisi yoksa 0 göster
+        function startSpeedTracking() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const speed = position.coords.speed;
+                        if (speed !== null && speed >= 0) {
+                            const speedKmh = speed * 3.6; // Metre/saniyeden km/s'e
+                            updateSpeed(speedKmh);
+                        } else {
+                            updateSpeed(0);
+                            statusDisplay.textContent = 'Hareket Bekleniyor';
+                        }
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                statusDisplay.textContent = 'GPS izni reddedildi. Lütfen izni açın.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                statusDisplay.textContent = 'Konum bilgisi alınamıyor.';
+                                break;
+                            case error.TIMEOUT:
+                                statusDisplay.textContent = 'GPS zaman aşımına uğradı.';
+                                break;
+                            default:
+                                statusDisplay.textContent = 'Bilinmeyen bir hata oluştu.';
+                                break;
+                        }
+                        speedDisplay.textContent = '0';
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 5000
                     }
-                },
-                (error) => {
-                    console.error('GPS Hatası:', error);
-                    speedValue.textContent = 'GPS Hatası';
-                },
-                {
-                    enableHighAccuracy: true, // Daha yüksek doğruluk
-                    maximumAge: 0, // Önbellek kullanma
-                    timeout: 5000 // 5 saniye içinde cevap bekle
-                }
-            );
-        } else {
-            speedValue.textContent = 'GPS Desteklenmiyor';
+                );
+            } else {
+                speedDisplay.textContent = 'Hata';
+                statusDisplay.textContent = 'Tarayıcınız GPS desteklemiyor.';
+            }
         }
+
+        // İlk çalıştırmada izni kontrol et ve başlat
+        startSpeedTracking();
+
+        // Kullanıcı izni reddederse tekrar deneme şansı
+        statusDisplay.addEventListener('click', () => {
+            if (statusDisplay.textContent.includes('GPS izni reddedildi')) {
+                startSpeedTracking();
+            }
+        });
     </script>
 </body>
 </html>
