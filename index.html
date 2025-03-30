@@ -1,104 +1,65 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canlı Hızölçer</title>
+    <title>Speedometer</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background: #0d1b2a;
+            background: #1e1e1e;
+            color: white;
             font-family: Arial, sans-serif;
-            color: #fff;
         }
-
-        .speed-box {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
-            width: 80%;
-            max-width: 350px;
+        .speedometer {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #222, #111);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
-
+        .needle {
+            width: 4px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(-90deg);
+            transition: transform 0.3s ease-in-out;
+        }
         .speed {
-            font-size: 70px;
-            color: #00ffcc;
-            margin: 0;
-        }
-
-        .unit {
-            font-size: 20px;
-            color: #b0b0b0;
-        }
-
-        .info {
-            font-size: 14px;
-            color: #ff4b5c;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 400px) {
-            .speed {
-                font-size: 50px;
-            }
-
-            .unit {
-                font-size: 18px;
-            }
+            position: absolute;
+            bottom: 20px;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="speed-box">
-        <div class="speed" id="speed">0</div>
-        <div class="unit">km/s</div>
-        <div class="info" id="info">Hız Ölçülüyor...</div>
+    <div class="speedometer">
+        <div class="needle" id="needle"></div>
+        <div class="speed" id="speed">0 km/h</div>
     </div>
-
     <script>
-        const speedElement = document.getElementById('speed');
-        const infoElement = document.getElementById('info');
+        function updateSpeed(speed) {
+            const needle = document.getElementById('needle');
+            const speedText = document.getElementById('speed');
+            let angle = -90 + (speed * 1.8); // 180 degree scale (0-100 km/h)
+            needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+            speedText.textContent = `${speed} km/h`;
+        }// Simulated speed changes
+    let speed = 0;
+    setInterval(() => {
+        speed = Math.floor(Math.random() * 101); // Random speed between 0-100
+        updateSpeed(speed);
+    }, 2000);
+</script>
 
-        // Hız güncelleme fonksiyonu
-        function setSpeed(speedKmh) {
-            speedElement.textContent = Math.round(speedKmh);
-            infoElement.textContent = 'Hız Ölçülüyor...';
-        }
-
-        // GPS başlatma
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(
-                (position) => {
-                    const speed = position.coords.speed; // Metre/saniye
-                    if (speed !== null && speed >= 0) {
-                        const speedKmh = speed * 3.6; // km/s'e çevir
-                        setSpeed(speedKmh);
-                    } else {
-                        setSpeed(0);
-                        infoElement.textContent = 'Hareket Algılanmadı';
-                    }
-                },
-                (error) => {
-                    setSpeed(0);
-                    infoElement.textContent = `Hata: ${error.message}`;
-                    console.log('GPS Hata Kodu:', error.code, 'Mesaj:', error.message);
-                },
-                {
-                    enableHighAccuracy: true, // Daha iyi doğruluk
-                    maximumAge: 0, // Önbellek yok
-                    timeout: 10000 // 10 saniye zaman aşımı
-                }
-            );
-        } else {
-            speedElement.textContent = 'Hata';
-            infoElement.textContent = 'GPS Desteklenmiyor';
-        }
-    </script>
 </body>
 </html>
