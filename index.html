@@ -3,141 +3,1352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canlı Dijital Hızölçer</title>
+    <title>MacaraClub Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --accent-color: #32CD32;
+            --light-color: #FFF8DC;
+            --dark-color: #2C1B0F;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
         body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--light-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--accent-color);
+            color: var(--light-color);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1200/800') center/cover no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-color);
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--light-color);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #269926;
+            transform: translateY(-3px);
+        }
+
+        /* Slider Section */
+        .slider-section {
+            padding: 100px 0;
+            background-color: var(--light-color);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            height: 400px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: var(--light-color);
+        }
+
+        .slide-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .slide-content p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .slider-arrow {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: var(--light-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .slider-arrow:hover {
+            background-color: var(--accent-color);
+        }
+
+        .prev {
+            margin-left: 15px;
+        }
+
+        .next {
+            margin-right: 15px;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 80px 0;
+            background-color: #f9f5f0;
+        }
+
+        .categories {
             display: flex;
             justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 80px;
+            background-color: #f9f5f0;
+            padding: 15px 0;
+            z-index: 100;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background-color: var(--light-color);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.03) rotateY(5deg);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .menu-item-content {
+            padding: 20px;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: #0d1b2a;
-            font-family: 'Segoe UI', sans-serif;
-            color: #fff;
+            margin-bottom: 10px;
         }
 
-        .speed-container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
-            backdrop-filter: blur(10px);
-            width: 80%;
-            max-width: 400px;
-            transition: transform 0.3s ease;
+        .menu-item-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
         }
 
-        .speed-container:hover {
-            transform: scale(1.05);
-        }
-
-        .speed {
-            font-size: 80px;
+        .menu-item-price {
             font-weight: bold;
-            color: #00ffcc;
-            margin: 0;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.7);
+            color: var(--secondary-color);
         }
 
-        .unit {
-            font-size: 24px;
-            color: #b0b0b0;
-            margin-top: -10px;
+        .menu-item-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            height: 60px;
+            overflow: hidden;
         }
 
-        .status {
-            font-size: 16px;
-            color: #ff4b5c;
-            margin-top: 20px;
-            opacity: 0.8;
+        .add-to-cart {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        @media (max-width: 500px) {
-            .speed-container {
-                padding: 30px;
+        .add-to-cart:hover {
+            background-color: #269926;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cart-content {
+            background-color: var(--light-color);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-header h2 {
+            color: var(--primary-color);
+        }
+
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-items {
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .cart-item-price {
+            color: var(--secondary-color);
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #eee;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .cart-item-quantity {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .remove-from-cart {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-from-cart:hover {
+            background-color: #ff5252;
+        }
+
+        .cart-summary {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background-color: #269926;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 50px 0 20px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light-color);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
             }
 
-            .speed {
-                font-size: 60px;
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background-color: var(--primary-color);
+                width: 100%;
+                text-align: center;
+                transition: var(--transition);
+                padding: 20px 0;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
             }
 
-            .unit {
-                font-size: 20px;
+            .nav-links.active {
+                right: 0;
             }
 
-            .status {
-                font-size: 14px;
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .menu-item-desc {
+                height: auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .slider-container {
+                height: 300px;
+            }
+
+            .slide img {
+                height: 300px;
+            }
+
+            .slider-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="speed-container">
-        <h1 class="speed" id="speed">0</h1>
-        <p class="unit">km/s</p>
-        <p class="status" id="status">Hız Ölçülüyor...</p>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo"><i class="fas fa-utensils"></i>MacaraClub</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Ana Sayfa</a></li>
+                    <li><a href="#menu">Menü</a></li>
+                    <li><a href="#about">Hakkımızda</a></li>
+                    <li><a href="#contact">İletişim</a></li>
+                </ul>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>MacaraClub Restaurant</h1>
+            <p>Eşsiz lezzetlerin ve unutulmaz deneyimlerin adresi. Sizleri benzersiz bir gastronomi macerasına davet ediyoruz.</p>
+            <a href="#menu" class="btn">Menüyü Keşfet</a>
+        </div>
+    </section>
+
+    <!-- Slider Section -->
+    <section class="slider-section">
+        <div class="container">
+            <h2 class="section-title">Öne Çıkan Lezzetlerimiz</h2>
+            <div class="slider-container">
+                <div class="slider" id="slider">
+                    <!-- Slider items will be dynamically added here -->
+                </div>
+                <div class="slider-controls">
+                    <div class="slider-arrow prev" id="prevSlide">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="slider-arrow next" id="nextSlide">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <h2 class="section-title">Menümüz</h2>
+            <div class="categories" id="categories">
+                <!-- Categories will be dynamically added here -->
+            </div>
+            <div class="menu-items" id="menuItems">
+                <!-- Menu items will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Sepetim</h2>
+                <div class="close-cart" id="closeCart">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically added here -->
+                <div class="empty-cart-message" id="emptyCartMessage">
+                    Sepetiniz boş. Lütfen menüden ürün ekleyin.
+                </div>
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total" id="cartTotal">Toplam: 0₺</div>
+                <button class="checkout-btn" id="checkoutBtn">Siparişi Tamamla</button>
+            </div>
+        </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3>MacaraClub</h3>
+                    <p>Benzersiz lezzetler ve eşsiz bir restoran deneyimi için sizleri MacaraClub'a bekliyoruz.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Bağlantılar</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Ana Sayfa</a></li>
+                        <li><a href="#menu">Menü</a></li>
+                        <li><a href="#about">Hakkımızda</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>İletişim</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> İstiklal Cad. No:123, İstanbul</li>
+                        <li><i class="fas fa-phone"></i> +90 212 345 6789</li>
+                        <li><i class="fas fa-envelope"></i> info@macaraclub.com</li>
+                        <li><i class="fas fa-clock"></i> Her gün 10:00 - 23:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 MacaraClub Restaurant. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
     <script>
-        const speedDisplay = document.getElementById('speed');
-        const statusDisplay = document.getElementById('status');
+        // Menu Data (JSON)
+        const menuData = {
+            "categories": [
+                {
+                    "id": "breakfast",
+                    "name": "Kahvaltı"
+                },
+                {
+                    "id": "starters",
+                    "name": "Başlangıçlar"
+                },
+                {
+                    "id": "mainCourses",
+                    "name": "Ana Yemekler"
+                },
+                {
+                    "id": "seafood",
+                    "name": "Deniz Ürünleri"
+                },
+                {
+                    "id": "vegetarian",
+                    "name": "Vejetaryen"
+                },
+                {
+                    "id": "desserts",
+                    "name": "Tatlılar"
+                },
+                {
+                    "id": "drinks",
+                    "name": "İçecekler"
+                }
+            ],
+            "items": [
+                {
+                    "id": 1,
+                    "name": "Serpme Kahvaltı",
+                    "category": "breakfast",
+                    "price": 145,
+                    "description": "Sınırsız çay eşliğinde zeytin, peynir çeşitleri, tereyağı, bal, reçel, yumurta, domates, salatalık ve özel ev yapımı böreklerin yer aldığı kahvaltı tabağı.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 2,
+                    "name": "Avokado Toast",
+                    "category": "breakfast",
+                    "price": 85,
+                    "description": "Ekşi maya ekmek üzerinde avokado ezmesi, poşe yumurta ve taze baharatlar ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 3,
+                    "name": "Pancake",
+                    "category": "breakfast",
+                    "price": 65,
+                    "description": "Karamel sos, taze meyveler ve çikolata parçaları ile servis edilen yumuşak pancake.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 4,
+                    "name": "Bruschetta",
+                    "category": "starters",
+                    "price": 75,
+                    "description": "Kızarmış ekmek üzerinde domates, sarımsak, fesleğen ve zeytinyağı ile hazırlanmış İtalyan başlangıcı.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 5,
+                    "name": "Karides Güveç",
+                    "category": "starters",
+                    "price": 120,
+                    "description": "Sarımsaklı tereyağı ve özel soslar ile hazırlanmış, fırında kızartılmış taze karides.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 6,
+                    "name": "Mantar Sote",
+                    "category": "starters",
+                    "price": 65,
+                    "description": "Tereyağında sotelenmiş karışık mantarlar, sarımsak ve taze kekik ile.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 7,
+                    "name": "Izgara Köfte",
+                    "category": "mainCourses",
+                    "price": 115,
+                    "description": "Özel baharatlarla hazırlanmış dana eti köfte, yanında pilav, közlenmiş domates ve biber ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 8,
+                    "name": "Kuzu Tandır",
+                    "category": "mainCourses",
+                    "price": 165,
+                    "description": "Fırında yavaş pişirilmiş kuzu eti, patates püresi ve mevsim sebzeleri ile.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 9,
+                    "name": "Izgara Tavuk",
+                    "category": "mainCourses",
+                    "price": 95,
+                    "description": "Özel marine edilmiş tavuk göğsü, ızgara sebzeler ve baharatlı patates ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 10,
+                    "name": "Levrek Fileto",
+                    "category": "seafood",
+                    "price": 145,
+                    "description": "Taze levrek fileto, limonlu tereyağı sos ve sebzeli risotto ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 11,
+                    "name": "Somon Izgara",
+                    "category": "seafood",
+                    "price": 155,
+                    "description": "Izgara somon, kremali ıspanak ve dereotlu patates püresi ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 12,
+                    "name": "Ahtapot Izgara",
+                    "category": "seafood",
+                    "price": 185,
+                    "description": "Marine edilmiş ızgara ahtapot, zeytinyağlı roka salatası ve limon sos ile.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 13,
+                    "name": "Sebzeli Risotto",
+                    "category": "vegetarian",
+                    "price": 85,
+                    "description": "Mevsim sebzeleri ile hazırlanmış kremali İtalyan risotto.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 14,
+                    "name": "Falafel Tabağı",
+                    "category": "vegetarian",
+                    "price": 75,
+                    "description": "Nohut köftesi falafel, humus, tahin sos ve taze pide ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                  "id": 15,
+                    "name": "Sebzeli Wrap",
+                    "category": "vegetarian",
+                    "price": 65,
+                    "description": "Közlenmiş sebzeler, humus ve taze otlar ile dürüm içinde servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 16,
+                    "name": "Çikolatalı Sufle",
+                    "category": "desserts",
+                    "price": 55,
+                    "description": "Sıcak servis edilen çikolatalı sufle, yanında vanilyalı dondurma ile.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 17,
+                    "name": "Cheesecake",
+                    "category": "desserts",
+                    "price": 60,
+                    "description": "Ev yapımı frambuazlı cheesecake, taze meyveler ile süslenmiş.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 18,
+                    "name": "Baklava",
+                    "category": "desserts",
+                    "price": 65,
+                    "description": "Geleneksel Türk tatlısı, ceviz veya fıstık ile doldurulmuş ince yufka katmanları.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 19,
+                    "name": "Ev Yapımı Limonata",
+                    "category": "drinks",
+                    "price": 30,
+                    "description": "Taze limon, şeker ve nane ile hazırlanmış serinletici içecek.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 20,
+                    "name": "Karışık Meyve Suyu",
+                    "category": "drinks",
+                    "price": 35,
+                    "description": "Günlük taze meyvelerden sıkılmış karışık meyve suyu.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 21,
+                    "name": "Türk Kahvesi",
+                    "category": "drinks",
+                    "price": 25,
+                    "description": "Geleneksel metotla pişirilmiş Türk kahvesi, lokum ile servis edilir.",
+                    "image": "/api/placeholder/400/300"
+                },
+                {
+                    "id": 22,
+                    "name": "Şarap (Kadeh)",
+                    "category": "drinks",
+                    "price": 65,
+                    "description": "Seçkin bağlardan özel şarap çeşitleri, kadeh servis.",
+                    "image": "/api/placeholder/400/300"
+                }
+            ]
+        };
 
-        function updateSpeed(speedKmh) {
-            speedDisplay.textContent = Math.round(speedKmh);
-            statusDisplay.textContent = 'Hız Ölçülüyor...';
+        // Shopping Cart
+        let cart = [];
+
+        // DOM Elements
+        const hamburgerBtn = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const slider = document.getElementById('slider');
+        const prevSlideBtn = document.getElementById('prevSlide');
+        const nextSlideBtn = document.getElementById('nextSlide');
+        const categoriesContainer = document.getElementById('categories');
+        const menuItemsContainer = document.getElementById('menuItems');
+        const cartIcon = document.getElementById('cartIcon');
+        const cartModal = document.getElementById('cartModal');
+        const closeCartBtn = document.getElementById('closeCart');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotalElement = document.getElementById('cartTotal');
+        const cartCountElement = document.getElementById('cartCount');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Mobile Menu Toggle
+        hamburgerBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Initialize Slider
+        let currentSlide = 0;
+        const featuredItems = menuData.items.filter((_, index) => index < 5);
+
+        function initSlider() {
+            featuredItems.forEach(item => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="slide-content">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="slide-price">${item.price}₺</div>
+                    </div>
+                `;
+                slider.appendChild(slide);
+            });
+            updateSlider();
         }
 
-        function startSpeedTracking() {
-            if ('geolocation' in navigator) {
-                navigator.geolocation.watchPosition(
-                    (position) => {
-                        const speed = position.coords.speed;
-                        if (speed !== null && speed >= 0) {
-                            const speedKmh = speed * 3.6; // Metre/saniyeden km/s'e
-                            updateSpeed(speedKmh);
-                        } else {
-                            updateSpeed(0);
-                            statusDisplay.textContent = 'Hareket Bekleniyor';
-                        }
-                    },
-                    (error) => {
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                statusDisplay.textContent = 'GPS izni reddedildi. Lütfen izni açın.';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                statusDisplay.textContent = 'Konum bilgisi alınamıyor.';
-                                break;
-                            case error.TIMEOUT:
-                                statusDisplay.textContent = 'GPS zaman aşımına uğradı.';
-                                break;
-                            default:
-                                statusDisplay.textContent = 'Bilinmeyen bir hata oluştu.';
-                                break;
-                        }
-                        speedDisplay.textContent = '0';
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        maximumAge: 0,
-                        timeout: 5000
-                    }
-                );
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        prevSlideBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide > 0) ? currentSlide - 1 : featuredItems.length - 1;
+            updateSlider();
+        });
+
+        nextSlideBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide < featuredItems.length - 1) ? currentSlide + 1 : 0;
+            updateSlider();
+        });
+
+        // Auto Slide
+        setInterval(() => {
+            currentSlide = (currentSlide < featuredItems.length - 1) ? currentSlide + 1 : 0;
+            updateSlider();
+        }, 5000);
+
+        // Initialize Categories
+        function initCategories() {
+            menuData.categories.forEach((category, index) => {
+                const categoryBtn = document.createElement('button');
+                categoryBtn.className = `category-btn ${index === 0 ? 'active' : ''}`;
+                categoryBtn.dataset.category = category.id;
+                categoryBtn.textContent = category.name;
+                categoriesContainer.appendChild(categoryBtn);
+            });
+
+            // Add event listeners to category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const category = btn.dataset.category;
+                    filterMenuItems(category);
+                });
+            });
+
+            // Initial filter
+            filterMenuItems(menuData.categories[0].id);
+        }
+
+        // Filter Menu Items by Category
+        function filterMenuItems(category) {
+            menuItemsContainer.innerHTML = '';
+            const filteredItems = menuData.items.filter(item => item.category === category);
+            
+            filteredItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="menu-item-content">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">${item.name}</h3>
+                            <div class="menu-item-price">${item.price}₺</div>
+                        </div>
+                        <div class="menu-item-desc">${item.description}</div>
+                        <button class="add-to-cart" data-id="${item.id}">Sepete Ekle</button>
+                    </div>
+                `;
+                menuItemsContainer.appendChild(menuItem);
+            });
+
+            // Add event listeners to "Add to Cart" buttons
+            document.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const itemId = parseInt(btn.dataset.id);
+                    addToCart(itemId);
+                });
+            });
+        }
+
+        // Add to Cart Function
+        function addToCart(itemId) {
+            const item = menuData.items.find(item => item.id === itemId);
+            const existingItem = cart.find(cartItem => cartItem.id === itemId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
             } else {
-                speedDisplay.textContent = 'Hata';
-                statusDisplay.textContent = 'Tarayıcınız GPS desteklemiyor.';
+                cart.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    image: item.image,
+                    quantity: 1
+                });
             }
+
+            updateCart();
+            showCartNotification();
         }
 
-        // İlk çalıştırmada izni kontrol et ve başlat
-        startSpeedTracking();
+        // Show Cart Notification
+        function showCartNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.textContent = 'Ürün sepete eklendi!';
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--accent-color)';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '1000';
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000);
+        }
 
-        // Kullanıcı izni reddederse tekrar deneme şansı
-        statusDisplay.addEventListener('click', () => {
-            if (statusDisplay.textContent.includes('GPS izni reddedildi')) {
-                startSpeedTracking();
+        // Update Cart Function
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCountElement.textContent = totalItems;
+
+            // Update cart items display
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+            } else {
+                emptyCartMessage.style.display = 'none';
+
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-info">
+                            <div class="cart-item-top">
+                                <div class="cart-item-title">${item.name}</div>
+                                <div class="cart-item-price">${item.price}₺</div>
+                            </div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                                <span class="cart-item-quantity">${item.quantity}</span>
+                                <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                                <button class="remove-from-cart" data-id="${item.id}">Kaldır</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItem);
+                });
+
+                // Add event listeners to cart item buttons
+                document.querySelectorAll('.quantity-btn.decrease').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        decreaseQuantity(parseInt(btn.dataset.id));
+                    });
+                });
+
+                document.querySelectorAll('.quantity-btn.increase').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        increaseQuantity(parseInt(btn.dataset.id));
+                    });
+                });
+
+                document.querySelectorAll('.remove-from-cart').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        removeFromCart(parseInt(btn.dataset.id));
+                    });
+                });
             }
+
+            // Update cart total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotalElement.textContent = `Toplam: ${total}₺`;
+        }
+
+        // Decrease Item Quantity
+        function decreaseQuantity(itemId) {
+            const item = cart.find(item => item.id === itemId);
+            if (item.quantity > 1) {
+                item.quantity -= 1;
+            } else {
+                removeFromCart(itemId);
+            }
+            updateCart();
+        }
+
+        // Increase Item Quantity
+        function increaseQuantity(itemId) {
+            const item = cart.find(item => item.id === itemId);
+            item.quantity += 1;
+            updateCart();
+        }
+
+        // Remove Item from Cart
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCart();
+        }
+
+        // Cart Modal Toggle
+        cartIcon.addEventListener('click', () => {
+            cartModal.style.display = 'flex';
+        });
+
+        closeCartBtn.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.style.display = 'none';
+            }
+        });
+
+        // Checkout Button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length > 0) {
+                alert('Sipariş tamamlandı! Teşekkür ederiz.');
+                cart = [];
+                updateCart();
+                cartModal.style.display = 'none';
+            } else {
+                alert('Lütfen önce sepetinize ürün ekleyin.');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initSlider();
+            initCategories();
+            updateCart();
+        });
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            document.querySelector('.hero').style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+        });
+
+        // 3D Effect for Menu Items
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                    const xRotation = ((y - rect.height / 2) / rect.height) * 10;
+                    const yRotation = ((rect.width / 2 - x) / rect.width) * 10;
+                    
+                    item.style.transform = `scale(1.03) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+                } else {
+                    item.style.transform = 'scale(1) rotateX(0) rotateY(0)';
+                }
+            });
+        });
+        
+        // Reset transform when mouse leaves
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'scale(1) rotateX(0) rotateY(0)';
+            });
         });
     </script>
 </body>
