@@ -1,1353 +1,1220 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MacaraClub Restaurant</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Farhad Sultan | Frontend Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #8B4513;
-            --secondary-color: #D2691E;
-            --accent-color: #32CD32;
-            --light-color: #FFF8DC;
-            --dark-color: #2C1B0F;
-            --shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            --transition: all 0.3s ease;
+            --primary-color: #4e54c8;
+            --secondary-color: #8f94fb;
+            --text-color: #333;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --animation-color-1: rgba(78, 84, 200, 0.3);
+            --animation-color-2: rgba(143, 148, 251, 0.3);
+        }
+
+        .dark-theme {
+            --primary-color: #8f94fb;
+            --secondary-color: #4e54c8;
+            --text-color: #f5f5f5;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --header-bg: rgba(30, 30, 30, 0.9);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --animation-color-1: rgba(143, 148, 251, 0.2);
+            --animation-color-2: rgba(78, 84, 200, 0.2);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            scroll-behavior: smooth;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
         }
 
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow-x: hidden;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Header Styles */
         header {
-            background-color: var(--primary-color);
-            color: var(--light-color);
             position: fixed;
-            width: 100%;
             top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow);
-        }
-
-        nav {
+            width: 100%;
+            background-color: var(--header-bg);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            box-shadow: var(--shadow);
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--light-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
             text-decoration: none;
             display: flex;
             align-items: center;
         }
 
-        .logo i {
-            margin-right: 10px;
-            color: var(--accent-color);
+        .logo span {
+            color: var(--secondary-color);
         }
 
-        .nav-links {
+        nav ul {
             display: flex;
             list-style: none;
         }
 
-        .nav-links li {
-            margin-left: 20px;
+        nav ul li {
+            margin: 0 1rem;
         }
 
-        .nav-links a {
-            color: var(--light-color);
+        nav ul li a {
             text-decoration: none;
+            color: var(--text-color);
             font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        .cart-icon {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
             position: relative;
-            cursor: pointer;
         }
 
-        .cart-count {
+        nav ul li a::after {
+            content: '';
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: var(--accent-color);
-            color: var(--light-color);
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8rem;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav ul li a:hover::after {
+            width: 80%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+            color: var(--text-color);
         }
 
         .hamburger {
             display: none;
             cursor: pointer;
+            background: none;
+            border: none;
             font-size: 1.5rem;
+            color: var(--text-color);
         }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1200/800') center/cover no-repeat;
-            background-attachment: fixed;
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+        }
+
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .background-animation li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: var(--animation-color-1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .background-animation li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 20s;
+            background: var(--animation-color-2);
+        }
+
+        .background-animation li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 25s;
+        }
+
+        .background-animation li:nth-child(3) {
+            left: 70%;
+            width: 40px;
+            height: 40px;
+            animation-delay: 4s;
+            animation-duration: 18s;
+        }
+
+        .background-animation li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 15s;
+            background: var(--animation-color-2);
+        }
+
+        .background-animation li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+            animation-duration: 22s;
+        }
+
+        .background-animation li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+            animation-duration: 30s;
+            background: var(--animation-color-2);
+        }
+
+        .background-animation li:nth-child(7) {
+            left: 35%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 7s;
+            animation-duration: 27s;
+        }
+
+        .background-animation li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+            background: var(--animation-color-2);
+        }
+
+        .background-animation li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .background-animation li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 40s;
+            background: var(--animation-color-2);
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Home Section */
+        #home {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            color: var(--light-color);
+            align-items: center;
             text-align: center;
-            padding-top: 80px;
         }
 
         .hero-content {
-            max-width: 800px;
+            z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--light-color);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .btn:hover {
-            background-color: #269926;
-            transform: translateY(-3px);
-        }
-
-        /* Slider Section */
-        .slider-section {
-            padding: 100px 0;
-            background-color: var(--light-color);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 50px;
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
             position: relative;
-            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            left: 15%;
+            bottom: -10px;
+            border-radius: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .cta-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .cta-btn:hover::before {
+            width: 100%;
+        }
+
+        /* About Section */
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
         }
 
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
             width: 100px;
-            height: 3px;
-            background-color: var(--accent-color);
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
-        .slider-container {
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.02);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-text {
+            flex: 1;
+            position: relative;
+        }
+
+        .code-block {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            font-family: 'Courier New', monospace;
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            height: 400px;
         }
 
-        .slider {
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        }
+
+        .code-line {
+            margin-bottom: 0.5rem;
             display: flex;
-            transition: transform 0.5s ease;
         }
 
-        .slide {
-            min-width: 100%;
+        .line-number {
+            color: #888;
+            margin-right: 1rem;
+            min-width: 20px;
+            text-align: right;
+        }
+
+        .property {
+            color: var(--primary-color);
+        }
+
+        .value {
+            color: var(--secondary-color);
+        }
+
+        .comment {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .typewriter {
             position: relative;
         }
 
-        .slide img {
+        .typewriter::after {
+            content: '|';
+            position: absolute;
+            right: -8px;
+            color: var(--primary-color);
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .project-img {
             width: 100%;
-            height: 400px;
+            height: 200px;
             object-fit: cover;
         }
 
-        .slide-content {
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-tag {
+            padding: 0.2rem 0.6rem;
+            background-color: var(--animation-color-1);
+            color: var(--text-color);
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        .project-description {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .project-link::after {
+            content: '';
             position: absolute;
-            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
             left: 0;
+            bottom: -2px;
+            transition: width 0.3s ease;
+        }
+
+        .project-link:hover::after {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: var(--light-color);
         }
 
-        .slide-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
         }
 
-        .slide-content p {
-            font-size: 1rem;
-            margin-bottom: 15px;
+        .project-details.active {
+            max-height: 500px;
         }
 
-        .slider-controls {
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            padding: 2rem 0;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 3rem;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 3rem;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.03);
+        }
+
+        .timeline-date {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: var(--secondary-color);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary-color);
+            border: 4px solid var(--primary-color);
+            border-radius: 50%;
             position: absolute;
             top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
+            right: -10px;
             transform: translateY(-50%);
             z-index: 1;
         }
 
-        .slider-arrow {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: var(--light-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+            right: auto;
+        }
+
+        /* Contact Section */
+        .contact-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: var(--transition);
-        }
-
-        .slider-arrow:hover {
-            background-color: var(--accent-color);
-        }
-
-        .prev {
-            margin-left: 15px;
-        }
-
-        .next {
-            margin-right: 15px;
-        }
-
-        /* Menu Section */
-        .menu-section {
-            padding: 80px 0;
-            background-color: #f9f5f0;
-        }
-
-        .categories {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
             flex-wrap: wrap;
-            gap: 10px;
-            position: sticky;
-            top: 80px;
-            background-color: #f9f5f0;
-            padding: 15px 0;
-            z-index: 100;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .category-btn {
-            padding: 10px 20px;
-            background-color: var(--light-color);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .category-btn.active, .category-btn:hover {
-            background-color: var(--primary-color);
-            color: var(--light-color);
-        }
-
-        .menu-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .menu-item {
-            background-color: var(--light-color);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .menu-item:hover {
-            transform: scale(1.03) rotateY(5deg);
-        }
-
-        .menu-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .menu-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .menu-item-content {
-            padding: 20px;
-        }
-
-        .menu-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .menu-item-title {
-            font-size: 1.3rem;
-            color: var(--primary-color);
-        }
-
-        .menu-item-price {
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-
-        .menu-item-desc {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            height: 60px;
-            overflow: hidden;
-        }
-
-        .add-to-cart {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .add-to-cart:hover {
-            background-color: #269926;
-        }
-
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cart-content {
-            background-color: var(--light-color);
-            width: 90%;
-            max-width: 600px;
-            border-radius: 10px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-header h2 {
-            color: var(--primary-color);
-        }
-
-        .close-cart {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-            transition: var(--transition);
-        }
-
-        .close-cart:hover {
-            color: var(--primary-color);
-        }
-
-        .cart-items {
-            padding: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: 15px;
-        }
-
-        .cart-item-info {
+        .contact-info {
             flex: 1;
+            min-width: 300px;
         }
 
-        .cart-item-top {
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-item {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
         }
 
-        .cart-item-title {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .cart-item-price {
-            color: var(--secondary-color);
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            background-color: #eee;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .quantity-btn:hover {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .cart-item-quantity {
-            margin: 0 10px;
-            font-weight: bold;
-        }
-
-        .remove-from-cart {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .remove-from-cart:hover {
-            background-color: #ff5252;
-        }
-
-        .cart-summary {
-            padding: 20px;
-            border-top: 1px solid #eee;
-            text-align: right;
-        }
-
-        .cart-total {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .checkout-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: var(--transition);
-        }
-
-        .checkout-btn:hover {
-            background-color: #269926;
-        }
-
-        .empty-cart-message {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-        }
-
-        /* Footer Section */
-        footer {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            padding: 50px 0 20px;
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: var(--light-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-color);
-            padding-left: 5px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .contact-icon {
+            margin-right: 1rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             width: 40px;
             height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-size: 1.2rem;
-            transition: var(--transition);
         }
 
-        .social-icon:hover {
-            background-color: var(--accent-color);
+        .contact-details h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-details p, .contact-details a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .contact-details a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid transparent;
+            background-color: var(--bg-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            color: var(--text-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .copyright {
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            color: #999;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-text {
+            color: var(--text-color);
+        }
+
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
         }
 
         /* Responsive Styles */
         @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 3rem;
+            .about-content {
+                flex-direction: column;
             }
 
-            .menu-items {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            .timeline::before {
+                left: 40px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 100px;
+                padding-right: 0;
+                text-align: left;
+            }
+
+            .timeline-item:nth-child(odd) {
+                left: 0;
+                padding-right: 0;
+                text-align: left;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-dot {
+                left: 40px;
+                right: auto;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-dot {
+                right: auto;
+                left: 40px;
             }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                flex-direction: column;
-                background-color: var(--primary-color);
-                width: 100%;
-                text-align: center;
-                transition: var(--transition);
-                padding: 20px 0;
-                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-            }
-
-            .nav-links.active {
-                right: 0;
-            }
-
-            .nav-links li {
-                margin: 15px 0;
+            header {
+                padding: 1rem;
             }
 
             .hamburger {
                 display: block;
             }
 
-            .hero h1 {
+            nav ul {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--header-bg);
+                padding: 2rem 0;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+            }
+
+            nav ul.active {
+                left: 0;
+            }
+
+            nav ul li {
+                margin: 1rem 0;
+                text-align: center;
+            }
+
+            .hero-title {
                 font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
             }
 
             .section-title {
                 font-size: 2rem;
             }
-
-            .menu-item-desc {
-                height: auto;
-            }
         }
 
         @media (max-width: 576px) {
-            .hero h1 {
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .hero-title {
                 font-size: 2rem;
             }
 
-            .slider-container {
-                height: 300px;
-            }
-
-            .slide img {
-                height: 300px;
-            }
-
-            .slider-arrow {
-                width: 30px;
-                height: 30px;
-                font-size: 1rem;
-            }
-
-            .menu-items {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .social-icons {
-                justify-content: center;
+            .contact-container {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Background Animation -->
+    <ul class="background-animation">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
     <!-- Header -->
     <header>
-        <div class="container">
-            <nav>
-                <a href="#" class="logo"><i class="fas fa-utensils"></i>MacaraClub</a>
-                <ul class="nav-links">
-                    <li><a href="#home">Ana Sayfa</a></li>
-                    <li><a href="#menu">Menü</a></li>
-                    <li><a href="#about">Hakkımızda</a></li>
-                    <li><a href="#contact">İletişim</a></li>
-                </ul>
-                <div class="cart-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
-                <div class="hamburger" id="hamburger">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
-        </div>
+        <a href="#home" class="logo">Farhad<span>Sultan</span></a>
+        <button class="hamburger" id="hamburger">☰</button>
+        <nav>
+            <ul id="navMenu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
+    <!-- Home Section -->
+    <section id="home">
         <div class="hero-content">
-            <h1>MacaraClub Restaurant</h1>
-            <p>Eşsiz lezzetlerin ve unutulmaz deneyimlerin adresi. Sizleri benzersiz bir gastronomi macerasına davet ediyoruz.</p>
-            <a href="#menu" class="btn">Menüyü Keşfet</a>
+            <h1 class="hero-title">Farhad Sultan</h1>
+            <h2 class="hero-subtitle">Frontend Developer</h2>
+            <p>I create beautiful, responsive websites with modern technologies</p>
+            <div class="cta-buttons">
+                <a href="#projects" class="cta-btn">View My Work</a>
+                <a href="#contact" class="cta-btn">Contact Me</a>
+            </div>
         </div>
     </section>
 
-    <!-- Slider Section -->
-    <section class="slider-section">
+    <!-- About Section -->
+    <section id="about">
         <div class="container">
-            <h2 class="section-title">Öne Çıkan Lezzetlerimiz</h2>
-            <div class="slider-container">
-                <div class="slider" id="slider">
-                    <!-- Slider items will be dynamically added here -->
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="/api/placeholder/400/400" alt="Farhad Sultan">
                 </div>
-                <div class="slider-controls">
-                    <div class="slider-arrow prev" id="prevSlide">
-                        <i class="fas fa-chevron-left"></i>
-                    </div>
-                    <div class="slider-arrow next" id="nextSlide">
-                        <i class="fas fa-chevron-right"></i>
+                <div class="about-text">
+                    <div class="code-block">
+                        <div class="code-line">
+                            <span class="line-number">1</span>
+                            <span class="comment">// About Farhad Sultan</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">2</span>
+                            <span class="property">const</span> developer = {
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">3</span>
+                            &nbsp;&nbsp;<span class="property">name</span>: <span class="value">"Farhad Sultan"</span>,
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">4</span>
+                            &nbsp;&nbsp;<span class="property">title</span>: <span class="value">"Frontend Developer"</span>,
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">5</span>
+                            &nbsp;&nbsp;<span class="property">skills</span>: <span class="value">["React", "JavaScript", "HTML", "CSS", "Responsive Design"]</span>,
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">6</span>
+                            &nbsp;&nbsp;<span class="property">location</span>: <span class="value">"Your Location"</span>,
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">7</span>
+                            &nbsp;&nbsp;<span class="property">education</span>: <span class="value">"Computer Science Degree"</span>,
+                        </div>
+                        <div class="code-line typewriter">
+                            <span class="line-number">8</span>
+                            &nbsp;&nbsp;<span class="property">passion</span>: <span class="value">"Building beautiful user interfaces"</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">9</span>
+                            };
+                        </div>
+                        <div class="code-line">
+                            <span class="line-number">10</span>
+                            <span class="comment">// More about me...</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Menu Section -->
-    <section class="menu-section" id="menu">
+    <!-- Projects Section -->
+    <section id="projects">
         <div class="container">
-            <h2 class="section-title">Menümüz</h2>
-            <div class="categories" id="categories">
-                <!-- Categories will be dynamically added here -->
-            </div>
-            <div class="menu-items" id="menuItems">
-                <!-- Menu items will be dynamically added here -->
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card" data-project="1">
+                    <img src="/api/placeholder/400/300" alt="Project 1" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">E-commerce Website</h3>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Redux</span>
+                            <span class="project-tag">CSS</span>
+                        </div>
+                        <p class="project-description">A fully responsive e-commerce website with product filtering, cart functionality, and user authentication.</p>
+                        <a href="#" class="project-link">View Details</a>
+                        <div class="project-details" id="project-details-1">
+                            <p>This project was built using React and Redux for state management. Features include:</p>
+                            <ul>
+                                <li>User authentication and profiles</li>
+                                <li>Product catalog with filtering and sorting</li>
+                                <li>Shopping cart and checkout process</li>
+                                <li>Order history and tracking</li>
+                                <li>Responsive design for all devices</li>
+                            </ul>
+                            <p>Technologies used: React, Redux, CSS, Firebase</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card" data-project="2">
+                    <img src="/api/placeholder/400/300" alt="Project 2" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Task Management App</h3>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Context API</span>
+                            <span class="project-tag">Styled Components</span>
+                        </div>
+                        <p class="project-description">A drag-and-drop task management application with customizable boards and task categories.</p>
+                        <a href="#" class="project-link">View Details</a>
+                        <div class="project-details" id="project-details-2">
+                            <p>A productivity application inspired by Trello and Asana. Key features include:</p>
+                            <ul>
+                                <li>Drag-and-drop interface</li>
+                                <li>Custom board creation</li>
+                                <li>Task categorization and priority flags</li>
+                                <li>Due date reminders</li>
+                                <li>Dark/light mode</li>
+                            </ul>
+                            <p>Technologies used: React, Context API, Styled Components, React Beautiful DND</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card" data-project="3">
+                    <img src="/api/placeholder/400/300" alt="Project 3" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Weather Dashboard</h3>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">API Integration</span>
+<span class="project-tag">Chart.js</span>
+                        </div>
+                        <p class="project-description">A weather dashboard that displays current conditions and forecasts for multiple locations with interactive charts.</p>
+                        <a href="#" class="project-link">View Details</a>
+                        <div class="project-details" id="project-details-3">
+                            <p>A comprehensive weather application with detailed forecasts. Features include:</p>
+                            <ul>
+                                <li>Current weather conditions</li>
+                                <li>5-day forecast</li>
+                                <li>Interactive temperature and precipitation charts</li>
+                                <li>Location search and favorites</li>
+                                <li>Weather alerts and notifications</li>
+                            </ul>
+                            <p>Technologies used: React, OpenWeather API, Chart.js, Geolocation API</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Sepetim</h2>
-                <div class="close-cart" id="closeCart">
-                    <i class="fas fa-times"></i>
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <h2 class="section-title">Work Experience</h2>
+            <div class="timeline">
+                <!-- Experience 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-date">2022 - Present</h3>
+                        <h4 class="timeline-title">Senior Frontend Developer</h4>
+                        <p class="timeline-company">Tech Solutions Inc.</p>
+                        <p>Led the frontend development of several high-profile projects, implementing modern React practices and improving performance through code optimization.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
                 </div>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be dynamically added here -->
-                <div class="empty-cart-message" id="emptyCartMessage">
-                    Sepetiniz boş. Lütfen menüden ürün ekleyin.
+                
+                <!-- Experience 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-date">2020 - 2022</h3>
+                        <h4 class="timeline-title">Frontend Developer</h4>
+                        <p class="timeline-company">Digital Innovations Co.</p>
+                        <p>Developed responsive web applications using React, Redux, and modern CSS. Collaborated with UX designers to implement pixel-perfect interfaces.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
                 </div>
-            </div>
-            <div class="cart-summary">
-                <div class="cart-total" id="cartTotal">Toplam: 0₺</div>
-                <button class="checkout-btn" id="checkoutBtn">Siparişi Tamamla</button>
+                
+                <!-- Experience 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="timeline-date">2018 - 2020</h3>
+                        <h4 class="timeline-title">Junior Web Developer</h4>
+                        <p class="timeline-company">WebTech Solutions</p>
+                        <p>Built and maintained websites for various clients using HTML, CSS, and JavaScript. Gained experience with React and responsive design principles.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <a href="mailto:farhad@example.com">farhad@example.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h4>Location</h4>
+                            <p>Your City, Country</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">💼</a>
+                        <a href="#" class="social-link">👨‍💻</a>
+                        <a href="#" class="social-link">📸</a>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Subject">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3>MacaraClub</h3>
-                    <p>Benzersiz lezzetler ve eşsiz bir restoran deneyimi için sizleri MacaraClub'a bekliyoruz.</p>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>Bağlantılar</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Ana Sayfa</a></li>
-                        <li><a href="#menu">Menü</a></li>
-                        <li><a href="#about">Hakkımızda</a></li>
-                        <li><a href="#contact">İletişim</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>İletişim</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt"></i> İstiklal Cad. No:123, İstanbul</li>
-                        <li><i class="fas fa-phone"></i> +90 212 345 6789</li>
-                        <li><i class="fas fa-envelope"></i> info@macaraclub.com</li>
-                        <li><i class="fas fa-clock"></i> Her gün 10:00 - 23:00</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2025 MacaraClub Restaurant. Tüm hakları saklıdır.
-            </div>
-        </div>
+        <p class="footer-text">© 2025 Farhad Sultan. All rights reserved. Designed with ❤️ by <a href="#" class="footer-link">Farhad Sultan</a></p>
     </footer>
 
     <script>
-        // Menu Data (JSON)
-        const menuData = {
-            "categories": [
-                {
-                    "id": "breakfast",
-                    "name": "Kahvaltı"
-                },
-                {
-                    "id": "starters",
-                    "name": "Başlangıçlar"
-                },
-                {
-                    "id": "mainCourses",
-                    "name": "Ana Yemekler"
-                },
-                {
-                    "id": "seafood",
-                    "name": "Deniz Ürünleri"
-                },
-                {
-                    "id": "vegetarian",
-                    "name": "Vejetaryen"
-                },
-                {
-                    "id": "desserts",
-                    "name": "Tatlılar"
-                },
-                {
-                    "id": "drinks",
-                    "name": "İçecekler"
-                }
-            ],
-            "items": [
-                {
-                    "id": 1,
-                    "name": "Serpme Kahvaltı",
-                    "category": "breakfast",
-                    "price": 145,
-                    "description": "Sınırsız çay eşliğinde zeytin, peynir çeşitleri, tereyağı, bal, reçel, yumurta, domates, salatalık ve özel ev yapımı böreklerin yer aldığı kahvaltı tabağı.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 2,
-                    "name": "Avokado Toast",
-                    "category": "breakfast",
-                    "price": 85,
-                    "description": "Ekşi maya ekmek üzerinde avokado ezmesi, poşe yumurta ve taze baharatlar ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 3,
-                    "name": "Pancake",
-                    "category": "breakfast",
-                    "price": 65,
-                    "description": "Karamel sos, taze meyveler ve çikolata parçaları ile servis edilen yumuşak pancake.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 4,
-                    "name": "Bruschetta",
-                    "category": "starters",
-                    "price": 75,
-                    "description": "Kızarmış ekmek üzerinde domates, sarımsak, fesleğen ve zeytinyağı ile hazırlanmış İtalyan başlangıcı.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 5,
-                    "name": "Karides Güveç",
-                    "category": "starters",
-                    "price": 120,
-                    "description": "Sarımsaklı tereyağı ve özel soslar ile hazırlanmış, fırında kızartılmış taze karides.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 6,
-                    "name": "Mantar Sote",
-                    "category": "starters",
-                    "price": 65,
-                    "description": "Tereyağında sotelenmiş karışık mantarlar, sarımsak ve taze kekik ile.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 7,
-                    "name": "Izgara Köfte",
-                    "category": "mainCourses",
-                    "price": 115,
-                    "description": "Özel baharatlarla hazırlanmış dana eti köfte, yanında pilav, közlenmiş domates ve biber ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 8,
-                    "name": "Kuzu Tandır",
-                    "category": "mainCourses",
-                    "price": 165,
-                    "description": "Fırında yavaş pişirilmiş kuzu eti, patates püresi ve mevsim sebzeleri ile.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 9,
-                    "name": "Izgara Tavuk",
-                    "category": "mainCourses",
-                    "price": 95,
-                    "description": "Özel marine edilmiş tavuk göğsü, ızgara sebzeler ve baharatlı patates ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 10,
-                    "name": "Levrek Fileto",
-                    "category": "seafood",
-                    "price": 145,
-                    "description": "Taze levrek fileto, limonlu tereyağı sos ve sebzeli risotto ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 11,
-                    "name": "Somon Izgara",
-                    "category": "seafood",
-                    "price": 155,
-                    "description": "Izgara somon, kremali ıspanak ve dereotlu patates püresi ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 12,
-                    "name": "Ahtapot Izgara",
-                    "category": "seafood",
-                    "price": 185,
-                    "description": "Marine edilmiş ızgara ahtapot, zeytinyağlı roka salatası ve limon sos ile.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 13,
-                    "name": "Sebzeli Risotto",
-                    "category": "vegetarian",
-                    "price": 85,
-                    "description": "Mevsim sebzeleri ile hazırlanmış kremali İtalyan risotto.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 14,
-                    "name": "Falafel Tabağı",
-                    "category": "vegetarian",
-                    "price": 75,
-                    "description": "Nohut köftesi falafel, humus, tahin sos ve taze pide ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                  "id": 15,
-                    "name": "Sebzeli Wrap",
-                    "category": "vegetarian",
-                    "price": 65,
-                    "description": "Közlenmiş sebzeler, humus ve taze otlar ile dürüm içinde servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 16,
-                    "name": "Çikolatalı Sufle",
-                    "category": "desserts",
-                    "price": 55,
-                    "description": "Sıcak servis edilen çikolatalı sufle, yanında vanilyalı dondurma ile.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 17,
-                    "name": "Cheesecake",
-                    "category": "desserts",
-                    "price": 60,
-                    "description": "Ev yapımı frambuazlı cheesecake, taze meyveler ile süslenmiş.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 18,
-                    "name": "Baklava",
-                    "category": "desserts",
-                    "price": 65,
-                    "description": "Geleneksel Türk tatlısı, ceviz veya fıstık ile doldurulmuş ince yufka katmanları.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 19,
-                    "name": "Ev Yapımı Limonata",
-                    "category": "drinks",
-                    "price": 30,
-                    "description": "Taze limon, şeker ve nane ile hazırlanmış serinletici içecek.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 20,
-                    "name": "Karışık Meyve Suyu",
-                    "category": "drinks",
-                    "price": 35,
-                    "description": "Günlük taze meyvelerden sıkılmış karışık meyve suyu.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 21,
-                    "name": "Türk Kahvesi",
-                    "category": "drinks",
-                    "price": 25,
-                    "description": "Geleneksel metotla pişirilmiş Türk kahvesi, lokum ile servis edilir.",
-                    "image": "/api/placeholder/400/300"
-                },
-                {
-                    "id": 22,
-                    "name": "Şarap (Kadeh)",
-                    "category": "drinks",
-                    "price": 65,
-                    "description": "Seçkin bağlardan özel şarap çeşitleri, kadeh servis.",
-                    "image": "/api/placeholder/400/300"
-                }
-            ]
-        };
-
-        // Shopping Cart
-        let cart = [];
-
-        // DOM Elements
-        const hamburgerBtn = document.getElementById('hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        const slider = document.getElementById('slider');
-        const prevSlideBtn = document.getElementById('prevSlide');
-        const nextSlideBtn = document.getElementById('nextSlide');
-        const categoriesContainer = document.getElementById('categories');
-        const menuItemsContainer = document.getElementById('menuItems');
-        const cartIcon = document.getElementById('cartIcon');
-        const cartModal = document.getElementById('cartModal');
-        const closeCartBtn = document.getElementById('closeCart');
-        const cartItemsContainer = document.getElementById('cartItems');
-        const cartTotalElement = document.getElementById('cartTotal');
-        const cartCountElement = document.getElementById('cartCount');
-        const emptyCartMessage = document.getElementById('emptyCartMessage');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-
-        // Mobile Menu Toggle
-        hamburgerBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            themeToggle.textContent = body.classList.contains('dark-theme') ? '☀️' : '🌙';
         });
-
-        // Initialize Slider
-        let currentSlide = 0;
-        const featuredItems = menuData.items.filter((_, index) => index < 5);
-
-        function initSlider() {
-            featuredItems.forEach(item => {
-                const slide = document.createElement('div');
-                slide.className = 'slide';
-                slide.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="slide-content">
-                        <h3>${item.name}</h3>
-                        <p>${item.description}</p>
-                        <div class="slide-price">${item.price}₺</div>
-                    </div>
-                `;
-                slider.appendChild(slide);
+        
+        // Mobile Navigation
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
             });
-            updateSlider();
-        }
-
-        function updateSlider() {
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
-
-        prevSlideBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : featuredItems.length - 1;
-            updateSlider();
         });
-
-        nextSlideBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide < featuredItems.length - 1) ? currentSlide + 1 : 0;
-            updateSlider();
-        });
-
-        // Auto Slide
-        setInterval(() => {
-            currentSlide = (currentSlide < featuredItems.length - 1) ? currentSlide + 1 : 0;
-            updateSlider();
-        }, 5000);
-
-        // Initialize Categories
-        function initCategories() {
-            menuData.categories.forEach((category, index) => {
-                const categoryBtn = document.createElement('button');
-                categoryBtn.className = `category-btn ${index === 0 ? 'active' : ''}`;
-                categoryBtn.dataset.category = category.id;
-                categoryBtn.textContent = category.name;
-                categoriesContainer.appendChild(categoryBtn);
+        
+        // Project Details Toggle
+        document.querySelectorAll('.project-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projectCard = link.closest('.project-card');
+                const projectId = projectCard.getAttribute('data-project');
+                const details = document.getElementById(`project-details-${projectId}`);
+                details.classList.toggle('active');
+                link.textContent = details.classList.contains('active') ? 'Hide Details' : 'View Details';
             });
-
-            // Add event listeners to category buttons
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const category = btn.dataset.category;
-                    filterMenuItems(category);
-                });
-            });
-
-            // Initial filter
-            filterMenuItems(menuData.categories[0].id);
-        }
-
-        // Filter Menu Items by Category
-        function filterMenuItems(category) {
-            menuItemsContainer.innerHTML = '';
-            const filteredItems = menuData.items.filter(item => item.category === category);
-            
-            filteredItems.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                menuItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="menu-item-content">
-                        <div class="menu-item-header">
-                            <h3 class="menu-item-title">${item.name}</h3>
-                            <div class="menu-item-price">${item.price}₺</div>
-                        </div>
-                        <div class="menu-item-desc">${item.description}</div>
-                        <button class="add-to-cart" data-id="${item.id}">Sepete Ekle</button>
-                    </div>
-                `;
-                menuItemsContainer.appendChild(menuItem);
-            });
-
-            // Add event listeners to "Add to Cart" buttons
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const itemId = parseInt(btn.dataset.id);
-                    addToCart(itemId);
-                });
-            });
-        }
-
-        // Add to Cart Function
-        function addToCart(itemId) {
-            const item = menuData.items.find(item => item.id === itemId);
-            const existingItem = cart.find(cartItem => cartItem.id === itemId);
-
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id: item.id,
-                    name: item.name,
-                    price: item.price,
-                    image: item.image,
-                    quantity: 1
-                });
+        });
+        
+        // Form Submission
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add form submission logic here
+            alert('Thank you for your message! I will get back to you soon.');
+            contactForm.reset();
+        });
+        
+        // Typewriter Effect
+        const typewriterElement = document.querySelector('.typewriter');
+        const typewriterText = typewriterElement.innerHTML;
+        typewriterElement.innerHTML = '';
+        
+        let i = 0;
+        function typeWriter() {
+            if (i < typewriterText.length) {
+                typewriterElement.innerHTML += typewriterText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
             }
-
-            updateCart();
-            showCartNotification();
         }
-
-        // Show Cart Notification
-        function showCartNotification() {
-            const notification = document.createElement('div');
-            notification.className = 'cart-notification';
-            notification.textContent = 'Ürün sepete eklendi!';
-            notification.style.position = 'fixed';
-            notification.style.bottom = '20px';
-            notification.style.right = '20px';
-            notification.style.backgroundColor = 'var(--accent-color)';
-            notification.style.color = 'white';
-            notification.style.padding = '10px 20px';
-            notification.style.borderRadius = '5px';
-            notification.style.zIndex = '1000';
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.3s';
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.opacity = '1';
-            }, 10);
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 2000);
-        }
-
-        // Update Cart Function
-        function updateCart() {
-            // Update cart count
-            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCountElement.textContent = totalItems;
-
-            // Update cart items display
-            cartItemsContainer.innerHTML = '';
-            
-            if (cart.length === 0) {
-                emptyCartMessage.style.display = 'block';
-            } else {
-                emptyCartMessage.style.display = 'none';
-
-                cart.forEach(item => {
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
-                    cartItem.innerHTML = `
-                        <img src="${item.image}" alt="${item.name}">
-                        <div class="cart-item-info">
-                            <div class="cart-item-top">
-                                <div class="cart-item-title">${item.name}</div>
-                                <div class="cart-item-price">${item.price}₺</div>
-                            </div>
-                            <div class="cart-item-controls">
-                                <button class="quantity-btn decrease" data-id="${item.id}">-</button>
-                                <span class="cart-item-quantity">${item.quantity}</span>
-                                <button class="quantity-btn increase" data-id="${item.id}">+</button>
-                                <button class="remove-from-cart" data-id="${item.id}">Kaldır</button>
-                            </div>
-                        </div>
-                    `;
-                    cartItemsContainer.appendChild(cartItem);
-                });
-
-                // Add event listeners to cart item buttons
-                document.querySelectorAll('.quantity-btn.decrease').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        decreaseQuantity(parseInt(btn.dataset.id));
-                    });
-                });
-
-                document.querySelectorAll('.quantity-btn.increase').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        increaseQuantity(parseInt(btn.dataset.id));
-                    });
-                });
-
-                document.querySelectorAll('.remove-from-cart').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        removeFromCart(parseInt(btn.dataset.id));
-                    });
-                });
-            }
-
-            // Update cart total
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartTotalElement.textContent = `Toplam: ${total}₺`;
-        }
-
-        // Decrease Item Quantity
-        function decreaseQuantity(itemId) {
-            const item = cart.find(item => item.id === itemId);
-            if (item.quantity > 1) {
-                item.quantity -= 1;
-            } else {
-                removeFromCart(itemId);
-            }
-            updateCart();
-        }
-
-        // Increase Item Quantity
-        function increaseQuantity(itemId) {
-            const item = cart.find(item => item.id === itemId);
-            item.quantity += 1;
-            updateCart();
-        }
-
-        // Remove Item from Cart
-        function removeFromCart(itemId) {
-            cart = cart.filter(item => item.id !== itemId);
-            updateCart();
-        }
-
-        // Cart Modal Toggle
-        cartIcon.addEventListener('click', () => {
-            cartModal.style.display = 'flex';
-        });
-
-        closeCartBtn.addEventListener('click', () => {
-            cartModal.style.display = 'none';
-        });
-
-        // Close modal when clicking outside
-        cartModal.addEventListener('click', (e) => {
-            if (e.target === cartModal) {
-                cartModal.style.display = 'none';
-            }
-        });
-
-        // Checkout Button
-        checkoutBtn.addEventListener('click', () => {
-            if (cart.length > 0) {
-                alert('Sipariş tamamlandı! Teşekkür ederiz.');
-                cart = [];
-                updateCart();
-                cartModal.style.display = 'none';
-            } else {
-                alert('Lütfen önce sepetinize ürün ekleyin.');
-            }
-        });
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            initSlider();
-            initCategories();
-            updateCart();
-        });
-
-        // Parallax Effect
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.pageYOffset;
-            document.querySelector('.hero').style.backgroundPositionY = `${scrollPosition * 0.5}px`;
-        });
-
-        // 3D Effect for Menu Items
-        document.addEventListener('mousemove', (e) => {
-            document.querySelectorAll('.menu-item').forEach(item => {
-                const rect = item.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-                    const xRotation = ((y - rect.height / 2) / rect.height) * 10;
-                    const yRotation = ((rect.width / 2 - x) / rect.width) * 10;
-                    
-                    item.style.transform = `scale(1.03) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-                } else {
-                    item.style.transform = 'scale(1) rotateX(0) rotateY(0)';
+        
+        // Start typewriter effect when about section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(typeWriter, 500);
+                    observer.unobserve(entry.target);
                 }
             });
         });
         
-        // Reset transform when mouse leaves
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('mouseleave', () => {
-                item.style.transform = 'scale(1) rotateX(0) rotateY(0)';
+        observer.observe(document.getElementById('about'));
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
     </script>
